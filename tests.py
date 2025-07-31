@@ -13,7 +13,7 @@ def formatter(string):
     return formatted_string
 
 
-def main():
+def test():
     # current directory
     cd_string = get_files_info("calculator", ".")
     formatted_cd_string = formatter(cd_string)
@@ -47,5 +47,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    test()
 
