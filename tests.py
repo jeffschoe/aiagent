@@ -15,35 +15,24 @@ def formatter(string):
 
 def test():
     # current directory
-    cd_string = get_files_info("calculator", ".")
-    formatted_cd_string = formatter(cd_string)
-    print("Result for current directory:\n" + 
-        formatted_cd_string
-        )
-
+    result = formatter(get_files_info("calculator", "."))
+    print("Result for current directory:")
+    print(result)
 
     # pkg
-    pkg_string = get_files_info("calculator", "pkg")
-    formatted_pkg_string = formatter(pkg_string)
-    print("Result for 'pkg' directory:\n" +
-        formatted_pkg_string
-        )
-
+    result = formatter(get_files_info("calculator", "pkg"))
+    print("Result for 'pkg' directory:")
+    print(result)  
 
     # /bin
-    bin_string = get_files_info("calculator", "/bin")
-    formatted_bin_string = formatter(bin_string)
-    print("Result for '/bin' directory:\n" +
-        formatted_bin_string
-        )
-
+    result = formatter(get_files_info("calculator", "/bin"))
+    print("Result for '/bin' directory:")
+    print(result)
 
     # ../
-    parent_dir_string = get_files_info("calculator", "../")
-    formatted_parent_dir_string = formatter(parent_dir_string)
-    print("Result for '../' directory:\n" +
-        formatted_parent_dir_string
-        )
+    result = formatter(get_files_info("calculator", "../"))
+    print("Result for '../' directory:")
+    print(result)
 
 
 if __name__ == "__main__":
