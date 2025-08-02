@@ -1,4 +1,5 @@
 from functions.get_files_info import get_files_info
+from functions.get_file_content import get_file_content
 
 
 def formatter(string):
@@ -14,6 +15,24 @@ def formatter(string):
 
 
 def test():
+
+    result = get_file_content("calculator", "main.py")
+    print("Result for TEST 1:")
+    print(result)
+
+    result = get_file_content("calculator", "pkg/calculator.py")
+    print("Result for TEST 2:")
+    print(result)
+
+    result = get_file_content("calculator", "/bin/cat") 
+    print("Result for TEST 3:")
+    print(result)
+
+    result = get_file_content("calculator", "pkg/does_not_exist.py")
+    print("Result for TEST 4:")
+    print(result)
+
+    """
     # current directory
     result = formatter(get_files_info("calculator", "."))
     print("Result for current directory:")
@@ -33,6 +52,13 @@ def test():
     result = formatter(get_files_info("calculator", "../"))
     print("Result for '../' directory:")
     print(result)
+
+    
+    result = get_file_content("calculator", "lorem.txt")
+    print("Result for get_file_content test:")
+    print(result)
+    """
+
 
 
 if __name__ == "__main__":
