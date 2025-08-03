@@ -1,6 +1,6 @@
 from functions.get_files_info import get_files_info
 from functions.get_file_content import get_file_content
-
+from functions.write_file import write_file
 
 def formatter(string):
     if string.startswith("-"):
@@ -16,6 +16,27 @@ def formatter(string):
 
 def test():
 
+
+
+    result = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
+    print("Result for TEST 1:")
+    print(result)
+
+    result = write_file("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet")
+    print("Result for TEST 2:")
+    print(result)
+
+    result = write_file("calculator", "/tmp/temp.txt", "this should not be allowed")
+    print("Result for TEST 3:")
+    print(result)
+
+
+
+
+
+
+    """
+    # get file content tests
     result = get_file_content("calculator", "main.py")
     print("Result for TEST 1:")
     print(result)
@@ -32,7 +53,8 @@ def test():
     print("Result for TEST 4:")
     print(result)
 
-    """
+    
+    # get file info tests
     # current directory
     result = formatter(get_files_info("calculator", "."))
     print("Result for current directory:")
