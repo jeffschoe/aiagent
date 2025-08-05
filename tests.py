@@ -1,6 +1,7 @@
 from functions.get_files_info import get_files_info
 from functions.get_file_content import get_file_content
 from functions.write_file import write_file
+from functions.run_python import run_python_file
 
 def formatter(string):
     if string.startswith("-"):
@@ -17,7 +18,29 @@ def formatter(string):
 def test():
 
 
+    result = run_python_file("calculator", "main.py")
+    print("Result for TEST 1:")
+    print(result)
 
+    result = run_python_file("calculator", "main.py", ["3 + 5"])
+    print("Result for TEST 2:")
+    print(result)
+
+    result = run_python_file("calculator", "tests.py")
+    print("Result for TEST 3:")
+    print(result)
+
+    result = run_python_file("calculator", "../main.py")
+    print("Result for TEST 4:")
+    print(result)
+
+    result = run_python_file("calculator", "nonexistent.py")
+    print("Result for TEST 5:")
+    print(result)
+
+    """
+
+    # write file tests
     result = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
     print("Result for TEST 1:")
     print(result)
@@ -30,12 +53,7 @@ def test():
     print("Result for TEST 3:")
     print(result)
 
-
-
-
-
-
-    """
+    
     # get file content tests
     result = get_file_content("calculator", "main.py")
     print("Result for TEST 1:")
