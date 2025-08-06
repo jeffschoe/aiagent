@@ -17,7 +17,17 @@ def formatter(string):
 
 def test():
 
+    #schema get files info test
+    result = get_files_info({'directory': '.'})
+    print("Result for TEST 1:")
+    print(result)
 
+    result = get_files_info({'directory': 'pkg'})
+    print("Result for TEST 2:")
+    print(result)
+
+    """
+    # run python files tests
     result = run_python_file("calculator", "main.py")
     print("Result for TEST 1:")
     print(result)
@@ -38,7 +48,7 @@ def test():
     print("Result for TEST 5:")
     print(result)
 
-    """
+   
 
     # write file tests
     result = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
