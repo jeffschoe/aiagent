@@ -51,6 +51,7 @@ def generate_content(client, messages, verbose):
         print("Response tokens:", response.usage_metadata.candidates_token_count)
     
     if not response.function_calls:
+        print(response.text)    
         return response.text
     
     for function_call_part in response.function_calls:
