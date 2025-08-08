@@ -1,8 +1,7 @@
 import os
 from google.genai import types
 
-def get_files_info(directory="."):
-    working_directory = "."
+def get_files_info(working_directory, directory="."):
     abs_working_dir = os.path.abspath(working_directory)
     target_dir = os.path.abspath(os.path.join(working_directory, directory))
     if not target_dir.startswith(abs_working_dir):
@@ -35,5 +34,7 @@ schema_get_files_info = types.FunctionDeclaration(
                 description="The directory to list files from, relative to the working directory. If not provided, lists files in the working directory itself.",
             ),
         },
+        required=["directory"],
     ),
+
 )
