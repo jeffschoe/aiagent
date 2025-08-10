@@ -18,42 +18,45 @@ available_functions = types.Tool(
 def call_function(function_call_part, verbose=False):
   
     if verbose:
-        print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+        print(
+            f"Calling function: {function_call_part.name}({function_call_part.args})"
+            )
     else:
         print(f" - Calling function: {function_call_part.name}")
-
-    args = function_call_part.args # args that the LLM thinks it should pass to the functions
-    args["working_directory"] = WORKING_DIR # add working_directory since LLM doesn't have that on its own
-    
     function_map = {
         "get_file_content": get_file_content,
         "get_files_info": get_files_info,
         "run_python_file": run_python_file,
         "write_file": write_file
     }
+    function_name = function_call_part.name
 
-    if function_call_part.name in function_map:
-        function_result = function_map[function_call_part.name](**args)
-
-        return types.Content(
-        role="tool",
-        parts=[
-            types.Part.from_function_response(
-                name=function_call_part.name,
-                response={"result": function_result},
-            )
-        ],
-        )
-    else:
+    
+    
+    if function_name not in function_map:
         return types.Content(
             role="tool",
             parts=[
                 types.Part.from_function_response(
-                    name=function_call_part.name,
-                    response={"error": f"Unknown function: {function_call_part.name}"},
+                    name=function_name,
+                    response={"error": f"Unknown function: {function_name}"},
                 )
             ],
         )
+    args = dict(function_call_part.args) # args that the LLM thinks it should pass to the functions
+    args["working_directory"] = WORKING_DIR # add working_directory since LLM doesn't have that on its own
+    function_result = function_map[function_name](**args)
+    return types.Content(
+    role="tool",
+    parts=[
+        types.Part.from_function_response(
+            name=function_name,
+            response={"result": function_result},
+        )
+    ],
+    )
+  
+        
     
     
 
