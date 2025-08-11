@@ -26,9 +26,16 @@ class Calculator:
         operators = []
 
         for token in tokens:
-            if token in self.operators:
+            if token == '(': # handle parenthesis
+                operators.append(token)
+            elif token == ')':
+                while operators and operators[-1] != '(': # resolve operators until matching left parenthesis
+                    self._apply_operator(operators, values)
+                operators.pop() # remove left parenthesis
+            elif token in self.operators:
                 while (
                     operators
+                    and operators[-1] not in  ['(', ')']
                     and operators[-1] in self.operators
                     and self.precedence[operators[-1]] >= self.precedence[token]
                 ):

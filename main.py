@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 
 from prompts import system_prompt
 from call_function import available_functions
-from functions.call_function import call_function
+from call_function import call_function
+from config import MAX_ITERS
 
 
 def main():
@@ -36,8 +37,18 @@ def main():
         types.Content(role="user", parts=[types.Part(text=user_prompt)]),
     ]
 
-    generate_content(client, messages, verbose)
-
+    iterations = 0
+    while iterations < MAX_ITERS:
+        iterations += 1
+        try:
+            final_response = generate_content(client, messages, verbose) # if it returned a response.text
+            if final_response:
+                print("Final response:")
+                print(final_response)
+                break
+        except Exception as e:
+            print(f'Error calling generate_content: {e}')
+            break
 
 def generate_content(client, messages, verbose):
     response = client.models.generate_content(
@@ -48,9 +59,8 @@ def generate_content(client, messages, verbose):
             ),
     )
 
-    # for next lesson
-    #for candidate in response.candidates:
-    #    messages.append(candidate.content)
+    for candidate in response.candidates:
+        messages.append(candidate.content)
 
     if verbose:
         print("Prompt tokens:", response.usage_metadata.prompt_token_count)
@@ -62,6 +72,10 @@ def generate_content(client, messages, verbose):
     function_responses = []
     for function_call_part in response.function_calls:
         function_call_result = call_function(function_call_part, verbose)
+        #print(f"\n\n*****DEBUG: {type(function_call_result)}\n\n")
+        #print(f"\n\n*****DEBUG: {function_call_result}\n\n")
+        #print(f"\n\n*****DEBUG: {type(function_call_result.parts)}\n\n")
+        #print(f"\n\n*****DEBUG: {function_call_result.parts}\n\n")
         if (
             not function_call_result.parts
             or not function_call_result.parts[0].function_response
@@ -72,8 +86,15 @@ def generate_content(client, messages, verbose):
             print(f"-> {function_call_result.parts[0].function_response.response}")
         function_responses.append(function_call_result.parts[0])
 
-        if not function_responses:
-            raise Exception("no function responses generated, exiting.")
-
+    if not function_responses:
+        raise Exception("no function responses generated, exiting.")
+        
+    messages.append(
+        types.Content(role="tool", parts=function_responses)
+        )
+        
+    return None
+    
+    #print(f"\n*****DEBUG: {messages}\n")
 if __name__ == "__main__":
     main()
