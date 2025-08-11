@@ -38,8 +38,12 @@ def main():
     ]
 
     iterations = 0
-    while iterations < MAX_ITERS:
+    while True:
         iterations += 1
+        if iterations > MAX_ITERS:
+            print(f"Maximum iterations ({MAX_ITERS}) reached.")
+            sys.exit(1)
+
         try:
             final_response = generate_content(client, messages, verbose) # if it returned a response.text
             if final_response:
@@ -48,7 +52,7 @@ def main():
                 break
         except Exception as e:
             print(f'Error calling generate_content: {e}')
-            break
+
 
 def generate_content(client, messages, verbose):
     response = client.models.generate_content(
@@ -59,12 +63,14 @@ def generate_content(client, messages, verbose):
             ),
     )
 
-    for candidate in response.candidates:
-        messages.append(candidate.content)
-
     if verbose:
         print("Prompt tokens:", response.usage_metadata.prompt_token_count)
         print("Response tokens:", response.usage_metadata.candidates_token_count)
+
+    if response.candidates:
+        for candidate in response.candidates:
+            function_call_content = candidate.content
+            messages.append(function_call_content)
 
     if not response.function_calls:   
         return response.text
@@ -72,10 +78,6 @@ def generate_content(client, messages, verbose):
     function_responses = []
     for function_call_part in response.function_calls:
         function_call_result = call_function(function_call_part, verbose)
-        #print(f"\n\n*****DEBUG: {type(function_call_result)}\n\n")
-        #print(f"\n\n*****DEBUG: {function_call_result}\n\n")
-        #print(f"\n\n*****DEBUG: {type(function_call_result.parts)}\n\n")
-        #print(f"\n\n*****DEBUG: {function_call_result.parts}\n\n")
         if (
             not function_call_result.parts
             or not function_call_result.parts[0].function_response
@@ -95,6 +97,5 @@ def generate_content(client, messages, verbose):
         
     return None
     
-    #print(f"\n*****DEBUG: {messages}\n")
 if __name__ == "__main__":
     main()

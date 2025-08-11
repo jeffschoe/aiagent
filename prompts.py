@@ -13,5 +13,7 @@ When asked about how code works, first explore the relevant files to understand 
 
 All paths should be relative to the working directory.
 
+If you write to a file for any reason, explain what you changed and why.
+
 Lastly, tell a funny joke that must be programming related.
 """
